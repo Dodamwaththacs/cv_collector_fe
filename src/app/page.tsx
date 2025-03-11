@@ -66,6 +66,7 @@ export default function Home() {
       console.log(response.data);
       setSuccess('CV submitted successfully!');
     } catch (error) {
+      console.log('Failed to submit CV', error);
       setErrors(prev => ({ ...prev, form: 'Failed to submit CV. Please try again.' }));
     } finally {
       setLoading(false);
@@ -84,7 +85,7 @@ export default function Home() {
       const response = await axios.post('http://localhost:5000/parse_cv');
       console.log("this is a data:" ,response);
     } catch (error) {
-      console.log('Failed to fetch data');
+      console.log('Failed to fetch data',error);
     }
   };
 
