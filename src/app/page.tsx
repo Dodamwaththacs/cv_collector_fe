@@ -19,7 +19,7 @@ export default function Home() {
     name: "",
     email: "",
     phone: "",
-    timezone: "Africa/Abidjan",
+    timezone: "",
     cv: null,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -63,12 +63,23 @@ export default function Home() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const getTimezone = () => {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    setFormData((prev) => ({
+      ...prev,
+      timezone
+    }));
+
+    console.log("Timezone:", timezone);
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
 
     setLoading(true);
     setSuccess(null);
+    getTimezone();
 
     try {
       const submitData = new FormData();
@@ -79,7 +90,7 @@ export default function Home() {
       if (formData.cv) submitData.append("pdf", formData.cv);
 
       const response = await axios.post(
-        "http://localhost:5000/parse_cv",
+        "http://18.136.151.225:5000/parse_cv",
         submitData
       );
       console.log(response.data);
@@ -191,6 +202,7 @@ export default function Home() {
             )}
           </button>
         </form>
+
       </div>
     </main>
   );
