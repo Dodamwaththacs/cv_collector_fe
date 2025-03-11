@@ -90,7 +90,7 @@ export default function Home() {
       if (formData.cv) submitData.append("pdf", formData.cv);
 
       const response = await axios.post(
-        "http://18.136.151.225:5000/parse_cv",
+        "https://chamika31.me:5443/parse_cv",
         submitData
       );
       console.log(response.data);
