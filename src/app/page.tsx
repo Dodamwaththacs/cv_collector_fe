@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, FormEvent, ChangeEvent } from "react";
+import { useState, useEffect,useRef, FormEvent, ChangeEvent } from "react";
 import axios from "axios";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
@@ -26,6 +26,22 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    
+    
+    getTimezone();
+  }, []);
+
+  const getTimezone = () => {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    setFormData((prev) => ({
+      ...prev,
+      timezone
+    }));
+
+    console.log("Timezone:", timezone);
+  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
@@ -63,15 +79,7 @@ export default function Home() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const getTimezone = () => {
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    setFormData((prev) => ({
-      ...prev,
-      timezone
-    }));
-
-    console.log("Timezone:", timezone);
-  };
+  
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -79,7 +87,8 @@ export default function Home() {
 
     setLoading(true);
     setSuccess(null);
-    getTimezone();
+
+    console.log("time-zone", formData.timezone);
 
     try {
       const submitData = new FormData();
@@ -116,7 +125,7 @@ export default function Home() {
         name: "",
         email: "",
         phone: "",
-        timezone: "Africa/Abidjan",
+        timezone: "",
         cv: null,
       });
 
@@ -124,6 +133,7 @@ export default function Home() {
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
+      getTimezone();
     }
   };
 
