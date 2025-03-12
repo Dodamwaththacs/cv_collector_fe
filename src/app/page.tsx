@@ -28,8 +28,6 @@ export default function Home() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    
-    
     getTimezone();
   }, []);
 
@@ -39,8 +37,6 @@ export default function Home() {
       ...prev,
       timezone
     }));
-
-    console.log("Timezone:", timezone);
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -72,14 +68,12 @@ export default function Home() {
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
       newErrors.email = "Please enter a valid email address";
     if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
-    else if (!/^\+?[1-9]\d{1,14}$/.test(formData.phone.replace(/[\s()-]/g, "")))
+    else if (!/^\d{10,14}$/.test(formData.phone.replace(/[\s()-]/g, "")))
       newErrors.phone = "Please enter a valid phone number";
     if (!formData.cv) newErrors.cv = "CV file is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
-  
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -158,6 +152,7 @@ export default function Home() {
                 type={field === "email" ? "email" : "text"}
                 id={field}
                 name={field}
+                placeholder={`Enter your ${field}`}
                 value={
                   typeof formData[field as keyof FormDataType] === "string"
                     ? (formData[field as keyof FormDataType] as string)
